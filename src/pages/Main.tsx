@@ -4,6 +4,7 @@ import { SearchResults } from '../components/SearchResults';
 import { useSearchResults } from '../hooks/useSearchResults';
 import { useTerm } from '../providers/SearchProvider';
 import { VIDEO_STREAM_BASE_URL } from '../api/searchAPI';
+import { SearchResult } from '../api/types/SearchResult';
 import mainStyles from './main.module.css';
 
 export const Main: React.FC = () => {
@@ -11,10 +12,6 @@ export const Main: React.FC = () => {
   const { search, searchResults } = useSearchResults();
   const [currentVideoId, setCurrentVideoId] = useState<string>();
   const [initialPlayBackTime, setInitialPlayBackTime] = useState<number>(0);
-
-  const currentVideoUrl = currentVideoId
-    ? `${VIDEO_STREAM_BASE_URL}?videoId=${currentVideoId}`
-    : undefined;
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -25,6 +22,19 @@ export const Main: React.FC = () => {
 
     return () => clearTimeout(timeoutId);
   }, [term]);
+
+  const currentVideoUrl = currentVideoId
+    ? `${VIDEO_STREAM_BASE_URL}?videoId=${currentVideoId}`
+    : undefined;
+
+  const handleSelectResult = (result: SearchResult) => {
+    let playbackTime = result.timeInSeconds;
+    if (initialPlayBackTime === result.timeInSeconds) {
+      --playbackTime;
+    }
+    setInitialPlayBackTime(playbackTime);
+    setCurrentVideoId(result.videoId);
+  };
 
   return (
     <div className={mainStyles.main}>
@@ -38,14 +48,7 @@ export const Main: React.FC = () => {
         <div className="five wide tablet eight wide computer column">
           <SearchResults
             results={searchResults}
-            onSelectResult={(result) => {
-              setCurrentVideoId(result.videoId);
-              let playbackTime = result.timeInSeconds;
-              if (initialPlayBackTime === result.timeInSeconds) {
-                --playbackTime;
-              }
-              setInitialPlayBackTime(playbackTime);
-            }}
+            onSelectResult={handleSelectResult}
           />
         </div>
       </div>

@@ -4,17 +4,17 @@ import { SearchResult } from '../../api/types/SearchResult';
 
 interface SearchResultItemProps {
   searchResult: SearchResult;
-  onClick(): void;
+  onClick(result: SearchResult): void;
 }
 
 export const SearchResultItem: React.FC<SearchResultItemProps> = ({
   searchResult,
   onClick
 }) => {
-  const { videoName, videoId, timeInSeconds, text } = searchResult;
+  const { timeInSeconds, text } = searchResult;
 
   return (
-    <div className="card">
+    <div className="ui card">
       <div className="content">
         <div className="meta">
           {moment()
@@ -26,8 +26,8 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({
           role="button"
           tabIndex={0}
           onKeyDown={() => {}}
-          className="ui bottom attached button"
-          onClick={onClick}
+          className="ui bottom attached  button"
+          onClick={() => onClick(searchResult)}
         >
           {text}
         </div>

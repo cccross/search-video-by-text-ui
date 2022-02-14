@@ -34,32 +34,34 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
   };
 
   return (
-    <div className="ui styled fluid accordion">
-      {Object.keys(groupedResults).map((key) => (
-        <div key={key}>
-          <div
-            role="button"
-            tabIndex={0}
-            className={`title ${activeGroup === key ? 'active' : ''}`}
-            onKeyDown={() => {}}
-            onClick={() => toggleActiveGroup(key)}
-          >
-            <i className="dropdown icon" />
-            {key}
-          </div>
-          <div className={`content ${activeGroup === key ? 'active' : ''}`}>
-            <div className="ui cards">
-              {groupedResults[key].map((result: SearchResult, index) => (
-                <SearchResultItem
-                  key={`${key}--${index}`}
-                  onClick={() => onSelectResult(result)}
-                  searchResult={result}
-                />
-              ))}
+    <div className="ui inverted segment">
+      <div className="ui inverted accordion ">
+        {Object.keys(groupedResults).map((key) => (
+          <div key={key}>
+            <div
+              role="button"
+              tabIndex={0}
+              className={`title ${activeGroup === key ? 'active' : ''}`}
+              onKeyDown={() => {}}
+              onClick={() => toggleActiveGroup(key)}
+            >
+              <i className="dropdown icon" />
+              {key}
+            </div>
+            <div className={`content ${activeGroup === key ? 'active' : ''}`}>
+              <div className="ui stackable cards">
+                {groupedResults[key].map((result: SearchResult, index) => (
+                  <SearchResultItem
+                    key={`${key}--${index}`}
+                    onClick={onSelectResult}
+                    searchResult={result}
+                  />
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };
