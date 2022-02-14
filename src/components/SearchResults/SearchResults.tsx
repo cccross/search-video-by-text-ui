@@ -33,6 +33,10 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
     }
   };
 
+  if (!results || !results.length) {
+    return null;
+  }
+
   return (
     <div className="ui inverted segment">
       <div className="ui inverted accordion ">

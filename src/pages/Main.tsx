@@ -5,7 +5,7 @@ import { useSearchResults } from '../hooks/useSearchResults';
 import { useTerm } from '../providers/SearchProvider';
 import { VIDEO_STREAM_BASE_URL } from '../api/searchAPI';
 import { SearchResult } from '../api/types/SearchResult';
-import mainStyles from './main.module.css';
+import './main.css';
 
 export const Main: React.FC = () => {
   const { term } = useTerm();
@@ -37,15 +37,15 @@ export const Main: React.FC = () => {
   };
 
   return (
-    <div className={mainStyles.main}>
+    <div className="main">
       <div className="ui grid">
-        <div className="eleven wide tablet eight wide computer column">
+        <div className="eleven wide tablet eight wide computer column fixed-container">
           <VideoPlayer
             src={currentVideoUrl}
             initialTimeInSeconds={initialPlayBackTime}
           />
         </div>
-        <div className="five wide tablet eight wide computer column">
+        <div className="five wide tablet eight wide computer right floated column">
           <SearchResults
             results={searchResults}
             onSelectResult={handleSelectResult}
