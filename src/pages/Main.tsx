@@ -17,8 +17,9 @@ export const Main: React.FC = () => {
     : undefined;
 
   const handleSelectResult = (result: SearchResult) => {
-    let playbackTime = result.timeInSeconds;
-    if (initialPlayBackTime === result.timeInSeconds) {
+    const offsetPlaybackInSeconds = 1;
+    let playbackTime = result.timeInSeconds - offsetPlaybackInSeconds;
+    if (initialPlayBackTime === playbackTime) {
       --playbackTime;
     }
     setInitialPlayBackTime(playbackTime);
