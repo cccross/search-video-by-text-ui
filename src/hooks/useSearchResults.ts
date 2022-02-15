@@ -4,7 +4,7 @@ import { SearchResult } from '../api/types/SearchResult';
 
 export const useSearchResults = () => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState<Error>();
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 
   const search = useCallback((term: string) => {
@@ -14,18 +14,10 @@ export const useSearchResults = () => {
       .getResults(term)
       .then((response: SearchResult[]) => {
         setSearchResults(response);
-        setError('');
+        setError(undefined);
       })
-      .catch((reason) => {
-        let message;
-        if (typeof reason === 'string') {
-          message = reason;
-        } else if (reason instanceof Error) {
-          message = reason.message;
-        } else {
-          message = 'Unexpeted Error';
-        }
-        setError(message);
+      .catch((reason: Error) => {
+        setError(reason);
       })
       .finally(() => {
         setLoading(false);

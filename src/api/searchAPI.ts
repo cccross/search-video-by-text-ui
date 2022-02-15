@@ -6,11 +6,9 @@ const RESOURCES = {
   VIDEOS: '/videos'
 };
 
-interface ResponseError {
-  response: { data: string };
-}
-
-const DEFAULT_ERROR_MESSAGE = 'Unexpected error happened';
+// interface ResponseError {
+//   response: { data: string };
+// }
 
 const baseURL: string = process.env.REACT_APP_SEARCH_SERVICE_BASE_URL || '/';
 
@@ -23,6 +21,15 @@ const instance = axios.create({ baseURL });
 //     return Promise.reject(errorMesage);
 //   }
 // );
+
+// let message;
+//         if (typeof reason === 'string') {
+//           message = reason;
+//         } else if (reason instanceof Error) {
+//           message = reason.message;
+//         } else {
+//           message = 'Unexpeted Error';
+//         }
 
 const getResults = async (term: string): Promise<SearchResult[]> => {
   const response = await instance.get(RESOURCES.RESULTS, {

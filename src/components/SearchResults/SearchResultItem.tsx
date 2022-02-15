@@ -14,7 +14,13 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({
   const { timeInSeconds, text } = searchResult;
 
   return (
-    <div className="ui card">
+    <div
+      role="button"
+      tabIndex={0}
+      onKeyDown={() => {}}
+      className="ui card stackable button"
+      onClick={() => onClick(searchResult)}
+    >
       <div className="content">
         <div className="meta">
           {moment()
@@ -22,15 +28,7 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({
             .add(timeInSeconds, 'seconds')
             .format('HH:mm:ss')}
         </div>
-        <div
-          role="button"
-          tabIndex={0}
-          onKeyDown={() => {}}
-          className="ui bottom attached  button"
-          onClick={() => onClick(searchResult)}
-        >
-          {text}
-        </div>
+        <div className="description">{text}</div>
       </div>
     </div>
   );

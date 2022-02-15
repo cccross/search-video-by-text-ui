@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useErrorHandler } from 'react-error-boundary';
 import { SearchResult } from '../../api/types/SearchResult';
+import { useSearchResults } from '../../hooks/useSearchResults';
+import { useTerm } from '../../providers/SearchProvider';
+import { Loading } from '../../components/Loading';
 import { SearchResultItem } from './SearchResultItem';
 
 interface SearchResultsProps {
-  results: SearchResult[];
   onSelectResult(result: SearchResult): void;
 }
 type GroupedResults = {
@@ -11,19 +14,34 @@ type GroupedResults = {
 };
 
 export const SearchResults: React.FC<SearchResultsProps> = ({
-  results,
   onSelectResult
 }) => {
+  const { term } = useTerm();
   const [activeGroup, setActiveGroup] = useState<string>();
+  const { search, searchResults, loading, error } = useSearchResults();
+  useErrorHandler(error);
 
-  const groupedResults = results.reduce((acc: GroupedResults, resultItem) => {
-    if (!acc[resultItem.videoName]) {
-      acc[resultItem.videoName] = [];
-    }
-    acc[resultItem.videoName].push(resultItem);
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (term) {
+        search(term);
+      }
+    }, 500);
 
-    return acc;
-  }, {});
+    return () => clearTimeout(timeoutId);
+  }, [term]);
+
+  const groupedResults = searchResults.reduce(
+    (acc: GroupedResults, resultItem) => {
+      if (!acc[resultItem.videoName]) {
+        acc[resultItem.videoName] = [];
+      }
+      acc[resultItem.videoName].push(resultItem);
+
+      return acc;
+    },
+    {}
+  );
 
   const toggleActiveGroup = (groupToToggle: string) => {
     if (groupToToggle === activeGroup) {
@@ -33,8 +51,22 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
     }
   };
 
-  if (!results || !results.length) {
-    return null;
+  if (loading) {
+    return (
+      <div>
+        <br />
+        <br />
+        <Loading />
+      </div>
+    );
+  }
+
+  if (!searchResults || !searchResults.length) {
+    return (
+      <div className="ui inverted segment">
+        <div className="ui inverted accordion"> No Results found :(</div>
+      </div>
+    );
   }
 
   return (
@@ -53,7 +85,7 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
               {key}
             </div>
             <div className={`content ${activeGroup === key ? 'active' : ''}`}>
-              <div className="ui stackable cards">
+              <div className="ui cards">
                 {groupedResults[key].map((result: SearchResult, index) => (
                   <SearchResultItem
                     key={`${key}--${index}`}
