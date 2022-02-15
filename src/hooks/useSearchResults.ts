@@ -5,7 +5,9 @@ import { SearchResult } from '../api/types/SearchResult';
 export const useSearchResults = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error>();
-  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+  const [searchResults, setSearchResults] = useState<
+    SearchResult[] | undefined
+  >(undefined);
 
   const search = useCallback((term: string) => {
     setLoading(true);

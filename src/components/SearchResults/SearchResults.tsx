@@ -3,7 +3,7 @@ import { useErrorHandler } from 'react-error-boundary';
 import { SearchResult } from '../../api/types/SearchResult';
 import { useSearchResults } from '../../hooks/useSearchResults';
 import { useTerm } from '../../providers/SearchProvider';
-import { Loading } from '../../components/Loading';
+import { Loading } from '../Loading';
 import { SearchResultItem } from './SearchResultItem';
 
 interface SearchResultsProps {
@@ -31,6 +31,28 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
     return () => clearTimeout(timeoutId);
   }, [term]);
 
+  if (loading) {
+    return (
+      <div>
+        <br />
+        <br />
+        <Loading />
+      </div>
+    );
+  }
+
+  if (!searchResults) {
+    return null;
+  }
+
+  if (!searchResults.length) {
+    return (
+      <div className="ui inverted segment">
+        <div className="ui inverted accordion"> No Results found :(</div>
+      </div>
+    );
+  }
+
   const groupedResults = searchResults.reduce(
     (acc: GroupedResults, resultItem) => {
       if (!acc[resultItem.videoName]) {
@@ -50,24 +72,6 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
       setActiveGroup(groupToToggle);
     }
   };
-
-  if (loading) {
-    return (
-      <div>
-        <br />
-        <br />
-        <Loading />
-      </div>
-    );
-  }
-
-  if (!searchResults || !searchResults.length) {
-    return (
-      <div className="ui inverted segment">
-        <div className="ui inverted accordion"> No Results found :(</div>
-      </div>
-    );
-  }
 
   return (
     <div className="ui inverted segment">
