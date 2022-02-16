@@ -72,11 +72,12 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
       setActiveGroup(groupToToggle);
     }
   };
+  const orderedKeys = Object.keys(groupedResults).sort();
 
   return (
     <div className="ui inverted segment">
       <div className="ui inverted accordion ">
-        {Object.keys(groupedResults).map((key) => (
+        {orderedKeys.map((key) => (
           <div key={key}>
             <div
               role="button"
