@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { ChangeEvent, KeyboardEvent, useState } from 'react';
 import { useTerm } from '../providers/SearchProvider';
 
 export const Header: React.FC = () => {
-  const { term, setTerm } = useTerm();
+  const [inputText, setInputText] = useState('');
+  const { setTerm } = useTerm();
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTerm(e.target.value);
+  const handleInputChange = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      setTerm(inputText);
+    }
   };
 
   return (
@@ -16,8 +19,11 @@ export const Header: React.FC = () => {
         <div className="item">
           <div className="ui icon input">
             <input
-              value={term}
-              onChange={handleInputChange}
+              value={inputText}
+              onKeyPress={handleInputChange}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setInputText(e.target.value)
+              }
               type="text"
               placeholder="Search..."
             />
